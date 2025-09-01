@@ -1,0 +1,29 @@
+name: API testy e-commerce
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stažení repozitáře
+        uses: actions/checkout@v3
+      - name: Instalace Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Instalace newman
+        run: npm install -g newman
+      - name: Spuštění Postman testů
+        run: |
+          newman run ecommerce-api-collection.json -e ecommerce-environment.json --reporters cli,json --reporter-json-export newman-report.json
+        working-directory: ./
+      - name: Uložení reportu jako artefakt
+        uses: actions/upload-artifact@v3
+        with:
+          name: newman-report
+          path: newman-report.json
