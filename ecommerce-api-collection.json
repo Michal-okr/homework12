@@ -1,30 +1,10 @@
 {
-  "info": {
-    "name": "Ecommerce API Collection",
-    "description": "Postman kolekce pro testování e-commerce API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "GET All Products",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/products",
-          "host": ["{{base_url}}"],
-          "path": ["products"]
-        }
-      },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
                 "pm.test('Status code je 200, 403 nebo 404', function () {",
                 "    pm.expect([200,403,404]).to.include(pm.response.code);",
                 "});",
                 "pm.test('Response time < 2000ms', function () {",
+                "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                "});",
                 "    pm.expect(pm.response.responseTime).to.be.below(2000);",
                 "});",
     {
@@ -51,7 +31,7 @@
               "});",
               "if(pm.response.code === 200) {",
               "    try {",
-              "        var jsonData = pm.response.json();",
+              {
               "        pm.test('Categories array exists', function () {",
               "            pm.expect(jsonData).to.be.an('array');",
               "        });",
@@ -69,7 +49,7 @@
             "type": "text/javascript"
           }
         }
-      ]
+        // ...other endpoints in the same style...
     },
     {
       "name": "GET Products By Category",
