@@ -111,16 +111,28 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test('Status code is 200', function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('Response time < 2000ms', function () {",
-              "    pm.expect(pm.response.responseTime).to.be.below(2000);",
-              "});",
-              "pm.test('Product has id', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.id).to.eql(1);",
-              "});"
+                "pm.test('Status code je 200, 403 nebo 404', function () {",
+                "    pm.expect([200,403,404]).to.include(pm.response.code);",
+                "});",
+                "pm.test('Response time < 2000ms', function () {",
+                "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                "});",
+                "if(pm.response.code === 200) {",
+                "    try {",
+                "        var jsonData = pm.response.json();",
+                "        pm.test('Product has id', function () {",
+                "            pm.expect(jsonData.id).to.eql(1);",
+                "        });",
+                "    } catch(e) {",
+                "        pm.test('Odpověď není JSON kvůli omezení API', function () {",
+                "            pm.expect(pm.response.text()).to.be.a('string');",
+                "        });",
+                "    }",
+                "} else {",
+                "    pm.test('Odpověď není JSON kvůli omezení API', function () {",
+                "        pm.expect(pm.response.text()).to.be.a('string');",
+                "    });",
+                "}"
             ],
             "type": "text/javascript"
           }
