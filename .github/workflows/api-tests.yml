@@ -23,7 +23,7 @@ jobs:
           newman run ecommerce-api-collection.json -e ecommerce-environment.json --reporters cli,json --reporter-json-export newman-report.json
         working-directory: ./
       - name: Uložení reportu jako artefakt
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: newman-report
           path: newman-report.json
